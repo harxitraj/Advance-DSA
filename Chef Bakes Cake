@@ -1,0 +1,26 @@
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
+class Codechef
+{
+    public static int vehiclesNeeded(int n, int x, int y){
+        //no. of cakes a vehicle can hold
+        int z = y/x;
+        
+        //no. of vehicles needed
+        return (n + z - 1) / z;
+        
+    }
+	public static void main (String[] args) throws java.lang.Exception
+	{
+		// your code goes here
+		Scanner sc = new Scanner(System.in);
+		int n = sc.nextInt();
+		int x = sc.nextInt();
+		int y = sc.nextInt();
+		
+		int res = vehiclesNeeded(n,x,y);
+		System.out.println(res);
+	}
+}

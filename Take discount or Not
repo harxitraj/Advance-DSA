@@ -1,0 +1,40 @@
+import java.util.Scanner;
+
+public class Main {
+    public static void isDiscount(int x, int y, int[] a){
+        int sum = 0;
+        for(int item: a){
+            sum += item;
+        }
+        
+        int disSum = 0;
+        for(int item: a){
+            item -= y;
+            if(item < 0) item = 0;
+            disSum += item;
+        }
+        
+        if(disSum+x < sum){
+            System.out.println("COUPON");
+        }else{
+            System.out.println("NO COUPON");
+        }
+    }
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        int t = scanner.nextInt();
+
+        while (t-- > 0) {
+            int n = scanner.nextInt();
+            int x = scanner.nextInt();
+            int y = scanner.nextInt();
+            int[] a = new int[n];
+
+            for (int i = 0; i < n; i++) {
+                a[i] = scanner.nextInt();
+            }
+            // Your code goes here
+            isDiscount(x,y,a);
+        }
+    }
+}

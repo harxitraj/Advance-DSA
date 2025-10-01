@@ -1,0 +1,32 @@
+class Solution {
+    public int makeArrayIncreasing(int[] arr1, int[] arr2) {
+        Arrays.sort(arr2);
+        TreeSet<Integer> set = new TreeSet<>();
+        for (int num : arr2) set.add(num);
+
+        Map<Integer, Integer> dp = new HashMap<>();
+        dp.put(-1, 0);
+
+        for (int num : arr1) {
+            Map<Integer, Integer> temp = new HashMap<>();
+            for (int prev : dp.keySet()) {
+                int ops = dp.get(prev);
+
+                if (num > prev) {
+                    temp.put(num, Math.min(temp.getOrDefault(num, Integer.MAX_VALUE), ops));
+                }
+
+                Integer higher = set.higher(prev);
+                if (higher != null) {
+                    temp.put(higher, Math.min(temp.getOrDefault(higher, Integer.MAX_VALUE), ops + 1));
+                }
+            }
+            dp = temp;
+            if (dp.isEmpty()) return -1;
+        }
+
+        int result = Collections.min(dp.values());
+        return result;
+        
+    }
+}

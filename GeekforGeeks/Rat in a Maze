@@ -1,0 +1,51 @@
+class Solution {
+    public ArrayList<String> ratInMaze(int[][] maze) {
+        // code here
+        ArrayList<String> result = new ArrayList<>();
+        int n = maze.length;
+        
+        //If start or destination is blocked
+        if (maze[0][0] == 0 || maze[n - 1][n - 1] == 0)
+            return result;
+        
+        boolean[][] visited = new boolean[n][n];
+        solve(maze, n, 0, 0, "", visited, result);
+        
+        Collections.sort(result);
+        return result;
+    }
+
+    private void solve(int[][] maze, int n, int row, int col, String path, 
+                       boolean[][] visited, ArrayList<String> result) {
+        //If destination reached
+        if (row == n - 1 && col == n - 1) {
+            result.add(path);
+            return;
+        }
+
+        visited[row][col] = true;
+
+        //Directions in lexicographic order → D, L, R, U
+        int[] dRow = {1, 0, 0, -1};
+        int[] dCol = {0, -1, 1, 0};
+        char[] move = {'D', 'L', 'R', 'U'};
+
+        for (int i = 0; i < 4; i++) {
+            int newRow = row + dRow[i];
+            int newCol = col + dCol[i];
+            
+            if (isSafe(maze, visited, n, newRow, newCol)) {
+                solve(maze, n, newRow, newCol, path + move[i], visited, result);
+            }
+        }
+
+        //Backtrack
+        visited[row][col] = false;
+    }
+
+    private boolean isSafe(int[][] maze, boolean[][] visited, int n, int row, int col) {
+        return (row >= 0 && row < n && col >= 0 && col < n &&
+                maze[row][col] == 1 && !visited[row][col]);
+    }
+        
+}

@@ -1,0 +1,42 @@
+/*
+class Node {
+    int data;
+    Node left, right;
+
+    Node(int data)
+    {
+        this.data = data;
+        this.left = null;
+        this.right = null;
+    }
+}
+*/
+
+class Solution {
+    private Map<Node, Integer> dp = new HashMap<>();
+    
+    public int getMaxSum(Node root) {
+        // code here
+        if (root == null) return 0;
+
+        if (dp.containsKey(root)) return dp.get(root);
+
+        int include = root.data;
+        if (root.left != null) {
+            include += getMaxSum(root.left.left);
+            include += getMaxSum(root.left.right);
+        }
+        if (root.right != null) {
+            include += getMaxSum(root.right.left);
+            include += getMaxSum(root.right.right);
+        }
+
+        int exclude = getMaxSum(root.left) + getMaxSum(root.right);
+
+        int res = Math.max(include, exclude);
+
+        dp.put(root, res);
+        return res;
+    }
+        
+}

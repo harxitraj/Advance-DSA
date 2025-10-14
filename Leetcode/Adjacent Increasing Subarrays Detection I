@@ -1,0 +1,26 @@
+class Solution {
+    public boolean hasIncreasingSubarrays(List<Integer> nums, int k) {
+        int n = nums.size();
+        if (n < 2 * k) return false; //Not enough elements for two adjacent subarrays
+        
+        //Lengths of strictly increasing sequences ending at each index
+        int[] inc = new int[n];
+        inc[0] = 1;
+        for (int i = 1; i < n; i++) {
+            if (nums.get(i) > nums.get(i - 1)) {
+                inc[i] = inc[i - 1] + 1;
+            } else {
+                inc[i] = 1;
+            }
+        }
+        
+        //Check for adjacent subarrays
+        for (int i = 0; i <= n - 2*k; i++) {
+            if (inc[i + k - 1] >= k && inc[i + 2 * k - 1] >= k) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+}

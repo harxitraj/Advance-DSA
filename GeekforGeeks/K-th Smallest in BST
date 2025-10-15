@@ -15,7 +15,10 @@ class Solution {
     public int kthSmallest(Node root, int k) {
         // code here
         Node ans = morris(root,k);
-        return ans!=null? ans.data : -1;
+        if (ans != null)
+            return ans.data;
+        else
+            return -1;
         
     }
     Node morris(Node curr, int k){

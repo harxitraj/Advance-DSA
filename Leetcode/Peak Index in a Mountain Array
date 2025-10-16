@@ -1,0 +1,20 @@
+class Solution {
+    public int peakIndexInMountainArray(int[] arr) {
+        int low = 0, high = arr.length - 1;
+
+        while (low < high) {
+            int mid = low + (high - low) / 2;
+
+            if (arr[mid] < arr[mid + 1]) {
+                // We are in the increasing part of the mountain
+                low = mid + 1;
+            } else {
+                // We are in the decreasing part of the mountain
+                high = mid;
+            }
+        }
+
+        return low;//As low or high both are same when loop ends
+    }
+        
+}

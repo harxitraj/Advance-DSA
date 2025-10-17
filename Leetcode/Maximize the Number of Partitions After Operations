@@ -1,0 +1,54 @@
+class Solution {
+    Map<Long, Integer> dp = new HashMap<>();
+    public int maxPartitionsAfterOperations(String s, int k) {
+        return solve(0, 0L, 0, k, s);
+    }
+
+    private int solve(long i, long mask, int change, int k, String s) {
+        int n = s.length();
+        if (i == n) {
+            return 1;
+        }
+
+        long currState = (i << 27) | (mask << 1) | change;
+
+        if (dp.containsKey(currState)) {
+            return dp.get(currState);
+        }
+
+        int val = s.charAt((int) i) - 'a';
+        long newMask = mask | (1L << val);
+
+        int count = Long.bitCount(newMask);
+
+        int ans = 0;
+        int maxi = 0;
+
+        if (count > k) {
+            ans = 1 + solve(i + 1, 1L << val, change, k, s);
+            maxi = Math.max(maxi, ans);
+        } else {
+            ans = solve(i + 1, newMask, change, k, s);
+            maxi = Math.max(maxi, ans);
+        }
+
+        if (change == 1) {
+            dp.put(currState, maxi);
+            return maxi;
+        }
+
+        for (int j = 0; j < 26; j++) {
+            long altMask = mask | (1L << j);
+            int newCount = Long.bitCount(altMask);
+
+            if (newCount > k) {
+                maxi = Math.max(maxi, 1 + solve(i + 1, 1L << j, 1, k, s));
+            } else {
+                maxi = Math.max(maxi, solve(i + 1, altMask, 1, k, s));
+            }
+        }
+
+        dp.put(currState, maxi);
+        return maxi;
+    }
+}

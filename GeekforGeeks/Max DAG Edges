@@ -1,0 +1,11 @@
+class Solution {
+    public int maxEdgesToAdd(int V, int[][] edges) {
+        // Code here
+        int totalEdgesPossible = (V * (V - 1)) / 2;
+        int alreadyEdges = edges.length;
+        
+        int edgesToAdd = totalEdgesPossible - alreadyEdges;
+
+        return edgesToAdd;
+    }
+}

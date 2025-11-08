@@ -1,0 +1,24 @@
+class Solution {
+    public int numberOfPath(int[][] mat, int k) {
+        // code here
+        int n = mat.length, m = mat[0].length;
+        Integer[][][] dp = new Integer[n][m][k + 1];
+        return helper(0, 0, k, mat, dp);
+    }
+    private int helper(int i, int j, int k, int[][] mat, Integer[][][] dp) {
+        int n = mat.length, m = mat[0].length;
+        if (i >= n || j >= m)
+            return 0;
+        if (k < 0)
+            return 0;
+        if (i == n - 1 && j == m - 1) {
+            return (k == mat[i][j]) ? 1 : 0;
+        }
+        if (dp[i][j][k] != null) return dp[i][j][k];
+        
+        int right = helper(i, j + 1, k - mat[i][j], mat, dp);
+        int down = helper(i + 1, j, k - mat[i][j], mat, dp);
+
+        return dp[i][j][k] = right + down;
+    }
+}

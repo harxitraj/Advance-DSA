@@ -1,0 +1,49 @@
+class Solution {
+    public int chocolatePickup(int[][] mat) {
+        // code here
+        int n = mat.length;
+        int maxSteps = 2 * (n - 1);
+        int[][][] dp = new int[maxSteps + 1][n][n];
+        for (int k = 0; k <= maxSteps; k++) {
+            for (int r1 = 0; r1 < n; r1++) {
+                for (int r2 = 0; r2 < n; r2++) {
+                    dp[k][r1][r2] = -1; 
+                }
+            }
+        }
+        dp[0][0][0] = mat[0][0];
+        for (int k = 1; k <= maxSteps; k++) {
+            for (int r1 = 0; r1 < n; r1++) {
+                int c1 = k - r1;
+                if (c1 < 0 || c1 >= n)
+                    continue;
+                if (mat[r1][c1] == -1)
+                    continue;
+                for (int r2 = 0; r2 < n; r2++) {
+                    int c2 = k - r2;
+                    if (c2 < 0 || c2 >= n)
+                        continue;
+                    if (mat[r2][c2] == -1)
+                        continue;
+                    int prevMax = -1;
+                    for (int prev_r1 = r1 - 1; prev_r1 <= r1; prev_r1++) {
+                        for (int prev_r2 = r2 - 1; prev_r2 <= r2; prev_r2++) {
+                            if (prev_r1 >= 0 && prev_r2 >= 0 && prev_r1 < n && prev_r2 < n) {
+                                prevMax = Math.max(prevMax, dp[k - 1][prev_r1][prev_r2]);
+                            }
+                        }
+                    }
+                    if (prevMax == -1) continue;
+                    
+                    int currentChocolates = mat[r1][c1];
+                    if (r1 != r2) { 
+                        currentChocolates += mat[r2][c2];
+                    }
+                    dp[k][r1][r2] = prevMax + currentChocolates;
+                }
+            }
+        }
+        int finalResult = dp[maxSteps][n - 1][n - 1];
+        return Math.max(0, finalResult);
+    }
+}

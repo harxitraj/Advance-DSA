@@ -1,0 +1,23 @@
+// User function Template for Java
+
+class Solution {
+    public List<String> AllPossibleStrings(String s) {
+        // Code here
+        List<String> a = new ArrayList<>();
+        solve(0, s, "", a);
+        Collections.sort(a);
+        return a;
+    }
+    public void solve(int index, String s, String curr, List<String> a) {
+        if (index == s.length()) {
+            if (!curr.isEmpty()) {
+                a.add(curr);
+            }
+            return;
+        }
+        //Include current character
+        solve(index + 1, s, curr + s.charAt(index), a);
+        //Exclude current character
+        solve(index + 1, s, curr, a);
+    }
+}

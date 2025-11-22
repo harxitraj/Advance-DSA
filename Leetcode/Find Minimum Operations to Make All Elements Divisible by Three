@@ -1,0 +1,12 @@
+class Solution {
+    public int minimumOperations(int[] nums) {
+        int count = 0;
+        for(int i = 0; i < nums.length; i++) {
+            int add = nums[i] % 3;
+            if(add == 1 || add == 2) {
+                count++;
+            }
+        }
+        return count;
+    }
+}

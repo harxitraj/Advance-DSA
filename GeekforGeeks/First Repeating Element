@@ -1,0 +1,17 @@
+class Solution {
+    public static int firstRepeated(int[] arr) {
+        // code here
+        HashSet<Integer> seen = new HashSet<>();
+        int firstRepeatingIndex = -1;
+        for (int i = arr.length - 1; i >= 0; i--) {
+            if (seen.contains(arr[i])) {
+                firstRepeatingIndex = i;
+            } else {
+                seen.add(arr[i]);
+            }
+        }
+        if (firstRepeatingIndex == -1)
+            return -1;
+        return firstRepeatingIndex + 1;
+    }
+}

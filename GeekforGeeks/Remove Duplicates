@@ -1,0 +1,16 @@
+// User function Template for Java
+
+class Solution {
+    String removeDups(String s) {
+        // code here
+        StringBuilder result = new StringBuilder();
+        boolean[] seen = new boolean[256];
+        for (char ch : s.toCharArray()) {
+            if (!seen[ch]) {
+                result.append(ch);
+                seen[ch] = true;
+            }
+        }
+        return result.toString();
+    }
+}

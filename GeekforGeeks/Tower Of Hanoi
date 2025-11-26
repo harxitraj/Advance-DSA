@@ -1,0 +1,16 @@
+class Solution {
+    public int towerOfHanoi(int n, int from, int to, int aux) {
+        // code here
+        // if(n == o)
+        //     return;
+        // if(n >= 1) {
+        //     int ans++;
+        //     towerOfHanoi(n-1, from, to, aux);
+        //     System.out.println("Move nth disk from source to destination");
+        //     towerOfHanoi(n-1, aux, from, to);
+        // }
+        // return ans;
+        int ans = (int) Math.pow(2, n);
+        return ans - 1;
+    }
+}

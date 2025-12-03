@@ -1,0 +1,22 @@
+class Solution {
+    int minCost(int[] height) {
+        // code here
+        int n = height.length;
+        int[] dp = new int [n];
+        //one element
+        dp[0] = 0;
+        
+        for(int i = 1; i < n; i++) {
+            //one jump
+            int one_jump = dp[i-1] + Math.abs(height[i] - height[i-1]);
+            
+            // two jump
+            int two_jump = Integer.MAX_VALUE;
+            if(i > 1) {
+                two_jump = dp[i-2] + Math.abs(height[i] - height[i-2]);
+            }
+            dp[i] = Math.min(one_jump, two_jump);
+        }
+        return dp[n-1];
+    }
+}

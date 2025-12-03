@@ -1,0 +1,28 @@
+class Solution {
+    int minCost(int[] height) {
+        // code here
+        int n = height.length;
+        int[] dp = new int[n];
+        Arrays.fill(dp,-1);
+        return solve(height, n-1, dp);
+    }
+    public int solve(int[] h, int i, int[] dp) {
+        if(i == 0) {
+            return 0;
+        }
+        if(dp[i] != -1) {
+            return dp[i];
+        }
+        //we have two choices -
+        //one jump
+        int one_jump = Integer.MAX_VALUE;
+        one_jump = Math.abs(h[i] - h[i-1]) + solve(h, i-1, dp);
+        
+        //two jump
+        int two_jump = Integer.MAX_VALUE;
+        if(i > 1) {
+            two_jump = Math.abs(h[i] - h[i-2]) + solve(h, i-2, dp);
+        }
+        return dp[i] =  Math.min(one_jump, two_jump);
+    }
+}

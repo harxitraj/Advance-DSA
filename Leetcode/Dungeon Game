@@ -1,0 +1,37 @@
+class Solution {
+    int m, n;
+    public int calculateMinimumHP(int[][] dungeon) {
+        m = dungeon.length;
+        n = dungeon[0].length;
+        int left = 1;
+        int right = 4 * (int)1e7;
+        int ans = right;
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+            int[][] seen = new int[m][n];
+            for (int[] row : seen)
+                Arrays.fill(row, -1);
+            if (canSurvive(0, 0, mid, dungeon, seen)) {
+                ans = mid;
+                right = mid - 1;
+            } else {
+                left = mid + 1;
+            }
+        }
+        return ans;
+    }
+    private boolean canSurvive(int i, int j, int health, int[][] d, int[][] seen) {
+        if (i >= m || j >= n)
+            return false;
+        health += d[i][j];
+        if (health <= 0)
+            return false;
+        if (seen[i][j] >= health)
+            return false;
+        seen[i][j] = health;
+        if (i == m - 1 && j == n - 1)
+            return true;
+        return canSurvive(i, j + 1, health, d, seen) 
+            || canSurvive(i + 1, j, health, d, seen);
+    }
+}

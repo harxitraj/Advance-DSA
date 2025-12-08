@@ -1,0 +1,30 @@
+class Solution {
+    int m, n;
+    public int calculateMinimumHP(int[][] dungeon) {
+        m = dungeon.length;
+        n = dungeon[0].length;
+        Integer[][] dp = new Integer[m][n];
+        return solveMemo(0, 0, dungeon, dp);
+    }
+    public int solveMemo(int i, int j, int[][] power, Integer[][] dp) {
+        if(i>=m || j>=n) {
+            return (int)1e9;
+        }
+        if(dp[i][j] != null) {
+            return dp[i][j];
+        }
+        if(i == m-1 && j == n-1) {
+            if(power[i][j] > 0) {
+                return 1;
+            } else {
+                return Math.abs(power[i][j]) + 1;
+            }
+        }
+        int down = solveMemo(i+1, j, power, dp);
+        int right = solveMemo(i, j+1, power, dp);
+
+        int need = Math.min(down, right) - power[i][j];
+
+        return dp[i][j] = (need <= 0) ? 1 : need;
+    }
+}

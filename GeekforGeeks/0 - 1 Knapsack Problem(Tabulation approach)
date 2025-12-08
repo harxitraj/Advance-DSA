@@ -1,0 +1,25 @@
+class Solution {
+    public int knapsack(int W, int val[], int wt[]) {
+        // code here
+        int n = val.length;
+        int[][] dp = new int[n][W+1];
+        for(int cap = 0; cap <= W; cap++) {
+            if(wt[0] <= cap) {
+                dp[0][cap] = val[0];
+            } else {
+                dp[0][cap] = 0;
+            }
+        }
+        for(int idx = 1; idx < n; idx++) {
+            for(int cap = 0; cap <= W; cap++) {
+                int notPick = dp[idx-1][cap];
+                int Pick = -(int)1e9;
+                if(wt[idx] <= cap) {
+                    Pick = val[idx] + dp[idx-1][cap-wt[idx]];
+                }
+                dp[idx][cap] = Math.max(Pick, notPick);
+            }
+        }
+        return dp[n-1][W];
+    }
+}

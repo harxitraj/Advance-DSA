@@ -1,0 +1,26 @@
+class Solution {
+    public int knapsack(int W, int val[], int wt[]) {
+        // code here
+        int n = val.length;
+        Integer[][] dp = new Integer[n][W+1];
+        return solveMemo(n-1, W, val, wt, dp);
+    }
+    public int solveMemo(int idx, int c, int[] val, int[] wt, Integer[][] dp) {
+        if(idx == 0) {
+            if(wt[0] <= c) {
+                return val[0];
+            } else {
+                return 0;
+            }
+        }
+        if(dp[idx][c] != null) {
+            return dp[idx][c];
+        }
+        int notPick = solveMemo(idx-1, c, val, wt, dp);
+        int Pick = -(int)1e9;
+        if(wt[idx] <= c) {
+            Pick = val[idx] + solveMemo(idx-1, c-wt[idx], val, wt, dp);
+        }
+        return dp[idx][c] = Math.max(Pick, notPick);
+    }
+}

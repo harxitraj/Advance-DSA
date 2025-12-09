@@ -1,0 +1,30 @@
+class Solution {
+    public boolean canPartition(int[] nums) {
+        int n = nums.length;
+        int sum = 0;
+        for(int i = 0; i < n; i++) {
+            sum += nums[i];
+        }
+        int target = sum/2;
+        Boolean[][] dp = new Boolean[n][target+1];
+        if(sum%2 == 1)
+            return false;
+        
+        return solveMemo(n-1, target, nums, dp);
+    }
+    public boolean solveMemo(int idx, int target, int[] arr, Boolean[][] dp) {
+        if(target == 0)
+            return true;
+        if(idx == 0)
+            return arr[0] == target;
+        if(dp[idx][target] != null) {
+            return dp[idx][target];
+        }
+        boolean notTake = solveMemo(idx-1, target, arr, dp);
+        boolean take = false;
+        if(arr[idx] <= target) {
+            take = solveMemo(idx-1, target-arr[idx], arr, dp);
+        }
+        return dp[idx][target] = (notTake || take);
+    }
+}

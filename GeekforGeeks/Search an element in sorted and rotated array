@@ -1,0 +1,15 @@
+// User function Template for Java
+
+class Solution {
+    static int Search(int array[], int target) {
+        // code here
+        int ans = -1;
+        for(int i = 0; i < array.length; i++) {
+            if(array[i] == target) {
+                ans = i;
+                break;
+            }
+        }
+        return ans;
+    }
+}

@@ -1,0 +1,23 @@
+class Solution {
+    public int cutRod(int[] price) {
+        // code here
+        int n = price.length;
+        Integer[][] dp = new Integer[n][n+1];
+        return solve(n-1, n, price, dp);
+    }
+    public static int solve(int idx, int len, int[] price, Integer[][] dp) {
+        if(idx == 0) {
+            return dp[0][len] = price[0] * len;
+        }
+        if(dp[idx][len] != null) {
+            return dp[idx][len];
+        }
+        int notTake = solve(idx-1, len, price, dp);
+        int take = (int) -1e9;
+        int rodL = idx+1;
+        if(rodL <= len) {
+            take = price[idx] + solve(idx, len - rodL, price, dp);
+        }
+        return dp[idx][len] = Math.max(notTake, take);
+    }
+}

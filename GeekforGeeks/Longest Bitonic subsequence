@@ -1,0 +1,34 @@
+class Solution {
+    public static int longestBitonicSequence(int n, int[] nums) {
+        // code here
+        int[] dp1 = new int[n];
+        int[] dp2 = new int[n];
+        Arrays.fill(dp1, 1);
+        Arrays.fill(dp2, 1);
+        int max1 = 1;
+        int max2 = 1;
+        for(int curr = 1; curr < n; curr++) {
+            for(int prev = 0; prev < curr; prev++) {
+                if(nums[curr] > nums[prev] && dp1[prev]+1 > dp1[curr]) {
+                    dp1[curr] = dp1[prev] + 1;
+                    max1 = Math.max(max1, dp1[curr]);
+                }
+            }
+        }
+        for(int curr = n-2; curr >= 1; curr--) {
+            for(int prev = n-1; prev >= curr; prev--) {
+                if(nums[curr] > nums[prev] && dp2[prev]+1 > dp2[curr]) {
+                    dp2[curr] = dp2[prev] + 1;
+                    max2 = Math.max(max2, dp2[curr]);
+                }
+            }
+        }
+        int maxA = 0;
+        for(int i = 0; i < n; i++) {
+            if(dp1[i] > 1 && dp2[i] > 1) {
+                maxA = Math.max(maxA, dp1[i]+dp2[i]-1);
+            }
+        }
+        return maxA;
+    }
+}

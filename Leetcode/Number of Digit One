@@ -1,0 +1,28 @@
+class Solution {
+    public int countDigitOne(int n) {
+        String s = String.valueOf(n);
+        Integer[][][] dp = new Integer[11][2][10];
+        int ans = solve(s, 0, 1, 0, dp);
+        return ans;
+    }
+    public static int solve(String s, int idx, int tight, int count_one, Integer[][][] dp) {
+        if(idx == s.length()) {
+            return count_one;
+        }
+        if(dp[idx][tight][count_one] != null) {
+            return dp[idx][tight][count_one];
+        }
+        int lb = 0;
+        int ub = (tight == 1) ? s.charAt(idx) - '0' : 9;
+        int result = 0;
+        for(int digit = lb; digit <= ub; digit++) {
+            int newTight = (tight == 1 && digit == ub) ? 1 : 0;
+            if(digit == 1) {
+                result += solve(s, idx+1, newTight, count_one + 1, dp);
+            } else {
+                result += solve(s, idx+1, newTight, count_one, dp);
+            }
+        }
+        return dp[idx][tight][count_one] = result;
+    }
+}

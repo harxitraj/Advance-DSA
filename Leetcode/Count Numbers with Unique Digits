@@ -1,0 +1,28 @@
+class Solution {
+    public int countNumbersWithUniqueDigits(int n) {
+        int x = (int) Math.pow(10, n);
+        String s = String.valueOf(x-1);
+        int ans = solve(s, 0, 1, 0, 0, 1);
+        return x - ans;
+    }
+    public int solve(String s, int idx, int tight, int repeated, int mask, int leadingZero) {
+        if(idx == s.length()) {
+            return repeated;
+        }
+        int lb = 0;
+        int ub = (tight == 1) ? s.charAt(idx) - '0' : 9;
+        int result = 0;
+        for(int digit = lb; digit <= ub; digit++) {
+            int newTight = (tight == 1 && digit == ub) ? 1 : 0;
+            if(leadingZero == 1 && digit == 0) {
+                result += solve(s, idx+1, newTight, repeated, mask, leadingZero);
+            } else {
+                int isDigitUsed = 1 & (mask >> digit);
+                int newRepeated = (repeated==1 || isDigitUsed==1) ? 1 : 0;
+                int newMask = ((1<<digit) | mask);
+                result += solve(s, idx+1, newTight, newRepeated, newMask, 0);
+            }
+        }
+        return result;
+    }
+}

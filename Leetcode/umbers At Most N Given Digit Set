@@ -1,0 +1,38 @@
+class Solution {
+    static final int len = 11;
+    public int atMostNGivenDigitSet(String[] digits, int n) {
+        int mask = 0;
+        for(int i = 0; i < digits.length; i++) {
+            int digit = Integer.parseInt(digits[i]);
+            mask = (mask | (1<<digit));
+        }
+        String s = String.valueOf(n);
+        Integer[][][] dp = new Integer[len][2][2];
+        return solve(s, 0, 1, mask, 1, dp) - 1;
+    }
+    public int solve(String s, int idx, int tight, int mask, int leadingZero, Integer[][][] dp) {
+        if(idx == s.length()) {
+            return 1;
+        }
+        if(dp[idx][tight][leadingZero] != null) {
+            return dp[idx][tight][leadingZero];
+        }
+        int lb = 0;
+        int ub = (tight==1) ? s.charAt(idx)-'0' : 9;
+        int result = 0;
+        for(int digit = lb; digit <= ub; digit++) {
+            int newTight = (tight == 1 && digit == ub) ? 1 : 0;
+            if(leadingZero == 1 && digit ==0) {
+                result += solve(s, idx+1, newTight, mask, leadingZero, dp);
+            } else {
+                int isDigitUsed = ((mask>>digit) & 1);
+                if(isDigitUsed == 0) {
+                    continue;
+                } else {
+                    result += solve(s, idx+1, newTight, mask, 0, dp);
+                }
+            }
+        }
+        return dp[idx][tight][leadingZero] = result;
+    }
+}

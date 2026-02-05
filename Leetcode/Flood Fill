@@ -1,0 +1,30 @@
+class Solution {
+    static int rowL;
+    static int colL;
+    public int[][] floodFill(int[][] image, int sr, int sc, int color) {
+        rowL = image.length;
+        colL = image[0].length;
+        boolean[][] visited = new boolean[rowL][colL];
+        // for(int i = 0; i < rowL; i++) {
+        //     for(int j = 0; j < colL; j++) {
+        //         if(!visited[i][j]) {
+        //             dfs(i, sc, visited, image, color);
+        //             image[i][j] = color;
+        //         }
+        //     }
+        // }
+        dfs(sr, sc, visited, image, color, image[sr][sc]);
+        return image;
+    }
+    public static void dfs(int r, int c, boolean[][] visited, int[][] image, int color, int oldValue) {
+        if(r<0 || c<0 || r>=rowL || c>= colL || image[r][c]!=oldValue || visited[r][c]==true) {
+            return;
+        }
+        visited[r][c] = true;
+        image[r][c] = color;
+        dfs(r - 1, c, visited, image, color, oldValue); //up call
+        dfs(r + 1, c, visited, image, color, oldValue); //down call
+        dfs(r, c - 1, visited, image, color, oldValue); //left call
+        dfs(r, c + 1, visited, image, color, oldValue); //right call
+    }
+}

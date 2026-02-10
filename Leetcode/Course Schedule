@@ -1,0 +1,34 @@
+class Solution {
+    public boolean canFinish(int numCourses, int[][] pre) {
+        ArrayList<ArrayList<Integer>> adj = new ArrayList<>();
+        ArrayList<Integer> ans = new ArrayList<>();
+        int[] inDegree = new int[numCourses];
+        for(int i = 0; i < numCourses; i++) {
+            adj.add(new ArrayList<>());
+        }
+        for(int[] p : pre) {
+            int u  = p[0];
+            int v = p[1];
+            inDegree[v]++;
+            adj.get(u).add(v);
+        }
+        Queue<Integer> q = new LinkedList<>();
+        for(int i = 0; i < numCourses; i++) {
+            if(inDegree[i]==0) {
+                q.offer(i);
+            }
+        }
+        while(!q.isEmpty()) {
+            int node = q.poll();
+            ans.add(node);
+            for(int adjNode : adj.get(node)) {
+                inDegree[adjNode]--;
+                if(inDegree[adjNode]==0) {
+                    q.offer(adjNode);
+                    inDegree[adjNode]--;
+                }
+            }
+        }
+        return (ans.size() == numCourses);
+    }
+}

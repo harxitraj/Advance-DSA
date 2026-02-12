@@ -1,0 +1,48 @@
+class Solution {
+    static class Pair {
+        int node;
+        int dist;
+        public Pair(int node, int dist) {
+            this.node = node;
+            this.dist = dist;
+        }
+    }
+    public int[] dijkstra(int V, int[][] edges, int src) {
+        // code here
+        int[] distance = new int[V];
+        Arrays.fill(distance, Integer.MAX_VALUE);
+        distance[src] = 0;
+        ArrayList<ArrayList<Pair>> adj = new ArrayList<>();
+        for(int i = 0; i < V; i++) {
+            adj.add(new ArrayList<>());
+        }
+        for(int[] edge : edges) {
+            int u = edge[0];
+            int v = edge[1];
+            int w = edge[2];
+            adj.get(u).add(new Pair(v, w));
+            adj.get(v).add(new Pair(u, w));
+        }
+        PriorityQueue<Pair> pq = new PriorityQueue<>((a, b) -> Integer.compare(a.dist, b.dist));
+        pq.offer(new Pair(src, 0));
+        
+        while(!pq.isEmpty()) {
+            Pair curr = pq.poll();
+            int u = curr.node;
+            int d = curr.dist;
+            
+            if(d > distance[u]) {  //most impotant line, decrease key via lazy deletion
+                continue;
+            }
+            for(Pair p : adj.get(u)) {
+                int v = p.node;
+                int costUV = p.dist;
+                if(distance[v] > distance[u] + costUV) {
+                    distance[v] = distance[u] + costUV;
+                    pq.offer(new Pair(v, distance[v]));
+                }
+            }
+        }
+        return distance;
+    }
+}

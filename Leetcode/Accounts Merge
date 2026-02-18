@@ -1,0 +1,96 @@
+class Solution {
+    static int components;
+    public List<List<String>> accountsMerge(List<List<String>> accounts) {
+
+        HashMap<String, Integer> emailToId = new HashMap<>();
+        HashMap<String, String> emailToName = new HashMap<>();
+        int id = 0;
+        for(List<String> acc : accounts) {
+            String name = acc.get(0);
+            for(int i = 1; i < acc.size(); i++) {
+                String email = acc.get(i);
+                if(!emailToId.containsKey(email)) {
+                    emailToId.put(email, id++);
+                }
+                emailToName.put(email, name);
+            }
+        }
+        components = id;
+        int[] parent = new int[id];
+        int[] rank = new int[id];
+        for(int i = 0; i < id; i++) {
+            parent[i] = i;
+            rank[i] = 1;
+        }
+
+        for(List<String> acc : accounts) {
+            if(acc.size() <= 2) {
+                continue;
+            }
+            int firstAccountId = emailToId.get(acc.get(1));
+            for(int k = 2; k < acc.size(); k++) {
+                unionByRank(firstAccountId, emailToId.get(acc.get(k)), parent, rank);
+            }
+        }
+
+        HashMap<Integer, List<String>> groupToId = new HashMap<>();
+        for(String email : emailToId.keySet()) {
+            int emailId = emailToId.get(email);
+            int root = findParent(emailId, parent);
+            if(!groupToId.containsKey(root)) {
+                groupToId.put(root, new ArrayList<>());
+            }
+            groupToId.get(root).add(email);
+        }
+
+        List<List<String>> result = new ArrayList<>();
+        for(Integer node : groupToId.keySet()) {
+            List<String> merge = groupToId.get(node);
+            Collections.sort(merge);
+            List<String> answer = new ArrayList<>();
+            answer.add(emailToName.get(merge.get(0)));
+            answer.addAll(merge);
+            result.add(answer);
+        }
+        return result;
+    }
+
+    public static int findParent(int x, int[] parent) {
+        if (x == parent[x]) {
+            return x;
+        }
+        return parent[x] = findParent(parent[x], parent);
+    }
+
+    public static boolean unionByRank(int x, int y, int[] parent, int[] rank) {
+        int parent_x = findParent(x, parent);
+        int parent_y = findParent(y, parent);
+        if (parent_x == parent_y) {
+            return false;
+        }
+        if (rank[parent_x] > rank[parent_y]) {
+            parent[parent_y] = parent_x;
+        } else if (rank[parent_x] < rank[parent_y]) {
+            parent[parent_x] = parent_y;
+        } else {
+            parent[parent_x] = parent_y;
+            rank[parent_y]++;
+        }
+        components--;
+        return true;
+    }
+    // public static boolean unionBySize(int x, int y, int[] parent, int[] size) {
+    //     int paren_x = findParent(x, parent);
+    //     int paren_y = findParent(y, parent);
+    //     if (paren_x == paren_y) return false;
+    //     if (size[paren_x] < size[paren_y]) {
+    //         int temp = paren_x;
+    //         paren_x = paren_y;
+    //         paren_y = temp;
+    //     }
+    //     parent[paren_y] = paren_x;
+    //     size[paren_x] += size[paren_y];
+    //     components--;
+    //     return true;
+    // }
+}

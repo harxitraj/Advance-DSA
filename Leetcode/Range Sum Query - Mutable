@@ -1,0 +1,67 @@
+class NumArray {
+    static int[] seg;
+    static int n;
+
+    public NumArray(int[] nums) {
+        n = nums.length;
+        seg = new int[4*n];
+        buildTree(0, 0, n-1, nums);
+    }
+
+    public void update(int index, int val) {
+        updateVal(0, index, val, 0, n-1);
+    }
+
+    public int sumRange(int left, int right) {
+        int ans = querySum(0, 0, n-1, left, right);
+        return ans;
+    }
+
+    private static void buildTree(int idx, int l, int r, int[] nums) {
+        if (l == r) {
+            seg[idx] = nums[l];
+            return;
+        }
+        int mid = l + (r - l) / 2;
+        buildTree(2*idx+1, l, mid, nums);
+        buildTree(2*idx+2, mid + 1, r, nums);
+
+        seg[idx] = seg[2*idx+1] + seg[2*idx+2];
+    }
+
+    private static void updateVal(int idx, int i, int val, int l, int r) {
+        if (l == r) {
+            seg[idx] = val;
+            return;
+        }
+        int mid = l + (r - l) / 2;
+        if (i <= mid) {
+            updateVal(2*idx+1, i, val, l, mid);
+
+        } else {
+            updateVal(2*idx+2, i, val, mid+1, r);
+        }
+
+        seg[idx] = seg[2*idx+1] + seg[2*idx+2];
+    }
+
+    private static int querySum(int idx, int l, int r, int r1, int r2) {
+        if(r < r1 || l > r2) {
+            return 0;
+        }
+        if(l >= r1 && r <= r2) {
+            return seg[idx];
+        }
+        int mid = l + (r - l) / 2;
+        int left = querySum(2*idx+1, l, mid, r1, r2);
+        int right = querySum(2*idx+2, mid+1, r, r1, r2);
+        return left + right;
+    }
+}
+
+/**
+ * Your NumArray object will be instantiated and called as such:
+ * NumArray obj = new NumArray(nums);
+ * obj.update(index,val);
+ * int param_2 = obj.sumRange(left,right);
+ */

@@ -1,0 +1,65 @@
+class Solution {
+    static int[] seg;
+    static int n;
+    public int[] leftmostBuildingQueries(int[] heights, int[][] queries) {
+        n = heights.length;
+        seg = new int[4*n];
+        int[] ans = new int[queries.length];
+        buildTree(0, 0, n-1, heights);
+
+        for(int i = 0; i < queries.length; i++) {
+            int a = queries[i][0];
+            int b = queries[i][1];
+            if(a > b) {
+                int temp = a;
+                a = b;
+                b = temp;
+            }
+            if(a == b) {
+                ans[i] = a;
+            }
+            else if(heights[a] < heights[b]) {
+                ans[i] = b;
+            } else {     // when heights[a] > heights[b]
+                int target = Math.max(heights[a], heights[b]);
+                ans[i] = queryMax(0, 0, n-1, b+1, target);
+            }
+        }
+
+        return ans;
+    }
+
+    private static void buildTree(int idx, int l, int r, int[] arr) {
+        if(l == r) {
+            seg[idx] = arr[l];
+            return;
+        }
+        int mid = l + (r - l) / 2;
+
+        int leftChild = 2*idx+1;
+        int rightChild = 2*idx+2;
+        buildTree(leftChild, l, mid, arr);
+        buildTree(rightChild, mid+1, r, arr);
+
+        seg[idx] = Math.max(seg[leftChild], seg[rightChild]);
+    }
+
+    private static int queryMax(int idx, int l, int r, int qs, int target) {
+        if(r < qs || seg[idx] <= target) {
+            return -1;
+        }
+        if(l == r) {
+            return l;
+        }
+        int mid = l + (r - l) / 2;
+        int leftChild = 2*idx+1;
+        int rightChild = 2*idx+2;
+        int left = queryMax(leftChild, l, mid, qs, target);
+        
+        if(left != -1) {
+            return left;
+        }
+
+        return queryMax(rightChild, mid+1, r, qs, target);
+    }
+}

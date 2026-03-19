@@ -1,0 +1,65 @@
+class Solution {
+    static class SegTree {
+        int n;
+        int[] seg;
+        public SegTree(int n) {
+            this.n = n;
+            seg = new int[4*n];
+        }
+        public int query(int node, int l, int r, int ql, int qr) {
+            //no overlapping
+            if(l > qr || r < ql) {
+                return 0;
+            }
+            //fully overlapping
+            if(ql <= l && r <= qr) {
+                return seg[node];
+            }
+            //partial overlapping
+            int mid = l + (r - l) / 2;
+            int left = query(2*node+1, l, mid, ql, qr);
+            int right = query(2*node+2, mid+1, r, ql, qr);
+
+            return left + right;
+        }
+
+        public void update(int node, int l, int r, int idx) {
+            if(l == r) {
+                seg[node]++;
+                return;
+            }
+            int mid = l + (r - l) / 2;
+            if(idx <= mid) {
+                update(2*node+1, l, mid, idx);
+            } else {
+                update(2*node+2, mid+1, r, idx);
+            }
+            seg[node] = seg[2*node+1] + seg[2*node+2];
+        }
+    }
+    public List<Integer> countSmaller(int[] nums) {
+        int n = nums.length;
+        int[] sorted = nums.clone();
+        Arrays.sort(sorted);
+
+        HashMap<Integer, Integer> map = new HashMap<>();
+        int idx = 0;
+        for(int val : sorted) {
+            if(!map.containsKey(val)) {
+                map.put(val, idx++);
+            }
+        }
+
+        //segment tree
+        SegTree seg = new SegTree(idx);
+        Integer[] ans = new Integer[n];
+
+        //right to left
+        for(int i = n-1; i >= 0; i--) {
+            int val = map.get(nums[i]);
+            ans[i] = seg.query(0, 0, idx-1, 0, val-1);   //node, l, r, ql, qr
+            seg.update(0, 0, idx-1, val);
+        }
+        return Arrays.asList(ans);
+    }
+}

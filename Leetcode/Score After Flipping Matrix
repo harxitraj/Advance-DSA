@@ -1,0 +1,43 @@
+class Solution {
+    public int matrixScore(int[][] grid) {
+        int m = grid.length;
+        int n = grid[0].length;
+
+        for(int i = 0; i < m; i++) {
+            if(grid[i][0] == 0) {
+                flipRow(grid, i);
+            }
+        }
+        for(int j = 1; j < n; j++) {
+            int ones = 0;
+            
+            for(int i = 0; i < m; i++) {
+                if(grid[i][j] == 1) ones++;
+            }
+            if (ones < m - ones) {
+                flipCol(grid, j);
+            }
+        }
+        int score = 0;
+        for (int i = 0; i < m; i++) {
+            int num = 0;
+            for (int j = 0; j < n; j++) {
+                num = num * 2 + grid[i][j];
+            }
+            score += num;
+        }
+        return score;
+    }
+    
+    private static void flipRow(int[][] grid, int r) {
+        for(int j = 0; j < grid[0].length; j++) {
+            grid[r][j] ^= 1;
+        }
+    }
+    
+    private static void flipCol(int[][] grid, int c) {
+        for(int i = 0; i < grid.length; i++) {
+            grid[i][c] ^= 1;
+        }
+    }
+}

@@ -1,0 +1,39 @@
+class Solution {
+    public List<String> wordBreak(String s, List<String> wordDict) {
+        Set<String> set = new HashSet<>(wordDict);
+        List<String>[] dp = new List[s.length()];
+        return solve(0, s, set, dp);
+    }
+
+    private static List<String> solve(int start, String s, Set<String> set, List<String>[] dp) {
+        if(start == s.length()) {
+            List<String> ans = new ArrayList<>();
+            ans.add("");
+            return ans;
+        }
+        if(dp[start] != null) {
+            return dp[start];
+        }
+        List<String> result = new ArrayList<>();
+        if(start == s.length()) {
+            result.add("");
+            return result;
+        }
+        for(int end = start + 1; end <= s.length(); end++) {
+            String word = s.substring(start, end);
+
+            if(set.contains(word)) {
+                List<String> subList = solve(end, s, set, dp);
+
+                for(String sub : subList) {
+                    if(sub.isEmpty()) {
+                        result.add(word);
+                    } else {
+                        result.add(word + " " + sub);
+                    }
+                }
+            }
+        }
+        return dp[start] = result;
+    }
+}

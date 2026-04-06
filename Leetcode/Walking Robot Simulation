@@ -1,0 +1,35 @@
+class Solution {
+    public int robotSim(int[] commands, int[][] obstacles) {
+        HashSet<String> set = new HashSet<>();
+        for(int[] obs : obstacles) {
+            set.add(obs[0] + "," + obs[1]);
+        }
+        int x = 0;
+        int y = 0;
+        int dir = 0; //0=N, 1=E, 2=S, 3=W
+        int[] dx = {0, 1, 0, -1};
+        int[] dy = {1, 0, -1, 0};
+        int maxDist = 0;
+        
+        for(int cmd : commands) {
+            if(cmd == -1) {
+                dir = (dir + 1) % 4; //turn right
+            } else if(cmd == -2) {
+                dir = (dir + 3) % 4; //turn left
+            } else { //move step by step
+                for(int i = 1; i <= cmd; i++) {
+                    int newX = x + dx[dir];
+                    int newY = y + dy[dir];
+                    
+                    if(set.contains(newX + "," + newY)) {
+                        break; // obstacle hit
+                    }
+                    x = newX;
+                    y = newY;
+                    maxDist = Math.max(maxDist, x*x + y*y);
+                }
+            }
+        }
+        return maxDist;
+    }
+}

@@ -1,0 +1,26 @@
+class Solution {
+    static int MOD = 1_000_000_007;
+    public int profitableSchemes(int n, int minProfit, int[] group, int[] profit) {
+        Integer[][][] dp = new Integer[group.length][n+1][minProfit+1];
+        return solve(0, n, minProfit, group, profit, dp);
+    }
+
+    private static int solve(int idx, int membersLeft, int profitNeeded, int[] group, int[] profit, Integer[][][] dp) {
+
+        if(idx == group.length) {
+            if (profitNeeded <= 0) {
+                return 1;
+            }
+            return 0;
+        }
+        if(dp[idx][membersLeft][profitNeeded] != null) {
+            return dp[idx][membersLeft][profitNeeded];
+        }
+        int take = 0;
+        int notTake = solve(idx + 1, membersLeft, profitNeeded, group, profit, dp);
+        if(membersLeft >= group[idx]) {
+            take = solve(idx + 1, membersLeft - group[idx], Math.max(0, profitNeeded - profit[idx]), group, profit, dp);
+        }
+        return dp[idx][membersLeft][profitNeeded] = (take + notTake) % MOD;
+    }
+}

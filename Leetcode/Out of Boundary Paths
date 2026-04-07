@@ -1,0 +1,45 @@
+class Solution {
+    static int MOD = 1_000_000_007;
+    static int moves;
+    static int M;
+    static int N;
+    static int[] dr = {0, 0, 1, -1};
+    static int[] dc = {1, -1, 0, 0};
+    public int findPaths(int m, int n, int maxMove, int startRow, int startColumn) {
+        moves = maxMove;
+        M = m;
+        N = n;
+        Integer[][][] dp = new Integer[M + 1][N + 1][maxMove + 1];
+        return solve(startRow, startColumn, 0, dp);
+    }
+    public int solve(int row, int col, int currMove, Integer[][][] dp){
+        if(row < 0 || row >= M || col < 0 || col >= N){
+            return 1;
+        }
+        if(currMove >= moves){
+            return 0;
+        }
+        if(dp[row][col][currMove] != null){
+            return dp[row][col][currMove];
+        }
+
+        int ans = 0;
+        // // left
+        // int left = solve(row , col - 1, currMove + 1, dp);
+        // ans = (ans + left) % MOD;
+        // // right
+        // int right = solve(row , col + 1, currMove + 1, dp);
+        // ans = (ans + right) % MOD;
+        // // up
+        // int up = solve(row - 1, col, currMove + 1, dp);
+        // ans = (ans + up) % MOD;
+        // // down
+        // int down = solve(row + 1, col, currMove + 1, dp);
+        // ans = (ans + down) % MOD;
+        for(int i = 0; i < 4; i++) {
+            ans = (solve(row + dr[i], col + dc[i], currMove + 1, dp) + ans) % MOD;
+        }
+
+        return dp[row][col][currMove]  = ans % MOD;
+    }
+}

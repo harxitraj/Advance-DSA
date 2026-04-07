@@ -1,0 +1,36 @@
+class Solution {
+    public int minCost(int[] houses, int[][] cost, int m, int n, int target) {
+        Integer[][][] dp = new Integer[m][n+1][target+1];
+        int ans = solve(0, 0, target, houses, cost, m, n, dp);
+        return ans == Integer.MAX_VALUE ? -1 : ans;
+    }
+
+    private static int solve(int idx, int prevColor, int target, int[] houses, int[][] cost, int m, int n, Integer[][][] dp) {
+
+        if(target < 0) {
+            return Integer.MAX_VALUE;
+        }
+        if(idx == m) {
+            return (target == 0) ? 0 : Integer.MAX_VALUE;
+        }
+        if(dp[idx][prevColor][target] != null) {
+            return dp[idx][prevColor][target];
+        }
+        if(houses[idx] != 0) {
+            int newTarget = target - (houses[idx] != prevColor ? 1 : 0);
+            return solve(idx + 1, houses[idx], newTarget, houses, cost, m, n, dp);
+        }
+        int minCost = Integer.MAX_VALUE;
+
+        for(int color = 1; color <= n; color++) {
+            int newTarget = target - (color != prevColor ? 1 : 0);
+
+            int next = solve(idx + 1, color, newTarget, houses, cost, m, n, dp);
+
+            if(next != Integer.MAX_VALUE) {
+                minCost = Math.min(minCost, cost[idx][color - 1] + next);
+            }
+        }
+        return dp[idx][prevColor][target] = minCost;
+    }
+}

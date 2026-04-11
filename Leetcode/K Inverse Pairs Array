@@ -1,0 +1,25 @@
+class Solution {
+    static int MOD = 1_000_000_007;
+    public int kInversePairs(int n, int k) {
+        Integer[][] dp = new Integer[n + 1][k + 1];
+        return solve(n, k, dp);
+    }
+
+    private static int solve(int n, int k, Integer[][] dp) {
+        if(k == 0) {
+            return 1;
+        }
+        if(n == 0) {
+            return 0;
+        }
+        if(dp[n][k] != null) {
+            return dp[n][k];
+        }
+        long ans = solve(n, k - 1, dp) + solve(n - 1, k, dp);
+        if(k >= n) {
+            ans -= solve(n - 1, k - n, dp);
+        }
+        ans = (ans % MOD + MOD) % MOD;
+        return dp[n][k] = (int) ans;
+    }
+}

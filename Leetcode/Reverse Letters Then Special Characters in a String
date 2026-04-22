@@ -1,0 +1,29 @@
+class Solution {
+    public String reverseByType(String s) {
+        char[] str = s.toCharArray();
+        StringBuilder letter = new StringBuilder();
+        StringBuilder special = new StringBuilder();
+        
+        for(int i = 0; i < str.length; i++) {
+            if(Character.isLetter(str[i])) {
+                letter.append(str[i]);
+            } else {
+                special.append(str[i]);
+            }
+        }
+        letter.reverse();
+        special.reverse();
+        StringBuilder ans = new StringBuilder();
+        int i = 0;
+        int j = 0;
+
+        for(int k = 0; k < str.length; k++) {
+            if(Character.isLetter(str[k])) {
+                ans.append(letter.charAt(i++));
+            } else {
+                ans.append(special.charAt(j++));
+            }
+        }   
+        return ans.toString();
+    }
+}

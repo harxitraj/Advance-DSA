@@ -1,0 +1,20 @@
+class Solution {
+    public ArrayList<Integer> dfs(ArrayList<ArrayList<Integer>> adj) {
+        // code here
+        boolean[] vis = new boolean[adj.size()];
+        ArrayList<Integer> ans = new ArrayList<>();
+        dfsTraversal(0, vis, ans, adj);
+        return ans;
+    }
+    
+    private static void dfsTraversal(int node, boolean[] vis, ArrayList<Integer> ans, ArrayList<ArrayList<Integer>> adj) {
+        vis[node] = true;
+        ans.add(node);
+        
+        for(int adjNode : adj.get(node)) {
+            if(!vis[adjNode]) {
+                dfsTraversal(adjNode, vis, ans, adj);
+            }
+        }
+    }
+}

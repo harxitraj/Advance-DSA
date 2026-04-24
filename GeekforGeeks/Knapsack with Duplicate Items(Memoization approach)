@@ -1,0 +1,23 @@
+class Solution {
+    public int knapSack(int val[], int wt[], int capacity) {
+        // code here
+        int n = val.length;
+        Integer[][] dp = new Integer[n+1][capacity+1];
+        return solve(n-1, capacity, val, wt, dp);
+    }
+    
+    private static int solve(int idx, int c, int[] val, int[] wt, Integer[][] dp) {
+        if(idx == 0) {
+            return (c / wt[0]) * val[0];
+        }
+        if(dp[idx][c] != null) {
+            return dp[idx][c];
+        }
+        int pick = 0;
+        int notPick = solve(idx-1, c, val, wt, dp);
+        if(wt[idx] <= c) {
+            pick = val[idx] + solve(idx, c-wt[idx], val, wt, dp);
+        }
+        return dp[idx][c] = Math.max(pick, notPick);
+    }
+}

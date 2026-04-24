@@ -1,0 +1,26 @@
+class Solution {
+    static Boolean isSubsetSum(int arr[], int sum) {
+        // code here
+        int n = arr.length;
+        Boolean[][] dp = new Boolean[n][sum+1];
+        return solve(n-1, sum, arr, dp);
+    }
+    
+    private static boolean solve(int idx, int target, int[] arr, Boolean[][]dp) {
+        if(target == 0) {
+            return true;
+        }
+        if(idx == 0) {
+            return (arr[0] == target);
+        }
+        if(dp[idx][target] != null) {
+            return dp[idx][target];
+        }
+        boolean pick = false;
+        boolean notPick = solve(idx-1, target, arr, dp);
+        if(target >= arr[idx]) {
+            pick = solve(idx-1, target-arr[idx], arr, dp);
+        }
+        return dp[idx][target] = (pick || notPick);
+    }
+}

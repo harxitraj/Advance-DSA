@@ -9,7 +9,7 @@ class Solution {
         return count;
     }
 
-    private int expand(String s, int left, int right) {
+    private static int expand(String s, int left, int right) {
         int count = 0;
         while(left >= 0 && right < s.length() && s.charAt(left) == s.charAt(right)) {
             count++;

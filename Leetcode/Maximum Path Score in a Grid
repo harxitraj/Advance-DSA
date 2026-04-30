@@ -1,0 +1,35 @@
+class Solution {
+    static int rowL;
+    static int colL;
+    public int maxPathScore(int[][] grid, int k) {
+        rowL = grid.length;
+        colL = grid[0].length;
+        Integer[][][] dp = new Integer[rowL+1][colL+1][k+1];
+        return solve(0, 0, 0, grid, k, dp);
+    }
+
+    private static int solve(int r, int c, int cost, int grid[][], int k, Integer[][][] dp) {
+        if(r < 0 || c < 0 || r >= rowL || c >= colL) {
+            return -1;
+        }
+        if(grid[r][c] == 1 || grid[r][c] == 2) {
+            cost += 1;
+        }
+        if(cost > k) {
+            return -1;
+        }
+        if(dp[r][c][cost] != null) {
+            return dp[r][c][cost];
+        }
+        if(r == rowL-1 && c == colL-1) {
+            return grid[r][c];
+        }
+        int right = solve(r, c+1, cost, grid, k, dp);
+        int down = solve(r+1, c, cost, grid, k, dp);
+        int result = Math.max(right, down);
+        if(result == -1) {
+            return dp[r][c][cost] = -1;
+        }
+        return dp[r][c][cost] = grid[r][c] + result;
+    }
+}

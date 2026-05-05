@@ -1,0 +1,35 @@
+class Solution {
+    static int MOD = 1_000_000_007;
+    public int countOfPairs(int[] nums) {
+        int maxVal = 0;
+        for (int num : nums) {
+            maxVal = Math.max(maxVal, num);
+        }
+        Integer[][] dp = new Integer[nums.length][maxVal + 1];
+        return solve(nums, 0, 0, dp);
+    }
+
+    private static int solve(int[] nums, int idx, int prev1, Integer[][] dp) {
+        if(idx == nums.length) {
+            return 1;
+        }
+        if(dp[idx][prev1] != null) {
+            return dp[idx][prev1];
+        }
+        int count = 0;
+
+        for(int x = 0; x <= nums[idx]; x++) {
+            if(idx == 0) {
+                count = (count + solve(nums, idx + 1, x, dp)) % MOD;
+            } else {
+                int diff = nums[idx] - nums[idx - 1];
+                int lowerBound = Math.max(prev1, prev1 + diff);
+
+                if(x >= lowerBound) {
+                    count = (count + solve(nums, idx + 1, x, dp)) % MOD;
+                }
+            }
+        }
+        return dp[idx][prev1] = count;
+    }
+}

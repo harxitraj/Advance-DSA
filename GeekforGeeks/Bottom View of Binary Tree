@@ -1,0 +1,54 @@
+/*
+Definition for Node
+class Node {
+    int data;
+    Node left;
+    Node right;
+
+    Node(int val) {
+        data = val;
+        left = right = null;
+
+    }
+}
+*/
+
+class Solution {
+    class Pair{
+        Node node;
+        int dis;
+        public Pair(Node node, int dis) {
+            this.node = node;
+            this.dis = dis;
+        }
+    }
+    public ArrayList<Integer> bottomView(Node root) {
+        // code here
+        if(root == null) {
+            return new ArrayList<>();
+        }
+        TreeMap<Integer, Integer> map = new TreeMap<>();
+        Queue<Pair> q = new LinkedList<>();
+        q.offer(new Pair(root, 0));
+        
+        while(!q.isEmpty()) {
+            Pair curr = q.poll();
+            Node currNode = curr.node;
+            int dist = curr.dis;
+            map.put(dist, currNode.data);
+            
+            if(currNode.left != null) {
+                q.offer(new Pair(currNode.left, dist-1));
+            }
+            if(currNode.right != null) {
+                q.offer(new Pair(currNode.right, dist+1));
+            }
+        }
+        
+        ArrayList<Integer> list = new ArrayList<>();
+        for(int val : map.values()) {
+            list.add(val);
+        }
+        return list;
+    }
+}

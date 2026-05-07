@@ -1,0 +1,31 @@
+class Solution {
+    public int countElements(int[] nums, int k) {
+        int n = nums.length;
+        int[] sorted = nums.clone();
+        Arrays.sort(sorted);
+        int count = 0;
+
+        for(int i = 0; i < n; i++) {
+            int idx = upperBound(sorted, nums[i]);
+            int greaterElements = n - idx;
+            if(greaterElements >= k) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    private static int upperBound(int[] arr, int target) {
+        int low = 0;
+        int high = arr.length;
+        while(low < high) {
+            int mid = low + (high - low) / 2;
+            if(arr[mid] <= target) {
+                low = mid + 1;
+            } else {
+                high = mid;
+            }
+        }
+        return low;
+    }
+}

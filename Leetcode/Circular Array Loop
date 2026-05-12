@@ -1,0 +1,35 @@
+class Solution {
+    public boolean circularArrayLoop(int[] nums) {
+        int n = nums.length;
+
+        for(int start = 0; start < n; start++) {
+            Set<Integer> vis = new HashSet<>();
+            int curr = start;
+            boolean direction = nums[start] > 0;
+            while(true) {
+                if((nums[curr] > 0) != direction) {
+                    break;
+                }
+                if(vis.contains(curr)) {
+                    int next = getNext(curr, nums);
+                    if(next == curr) {
+                        break;
+                    }
+                    return true;
+                }
+                vis.add(curr);
+                int next = getNext(curr, nums);
+                if(next == curr) {
+                    break;
+                }
+                curr = next;
+            }
+        }
+        return false;
+    }
+
+    private static int getNext(int curr, int[] nums) {
+        int n = nums.length;
+        return ((curr + nums[curr]) % n + n) % n;
+    }
+}

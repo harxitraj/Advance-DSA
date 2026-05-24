@@ -1,0 +1,19 @@
+class Solution {
+    public String customSortString(String order, String s) {
+        StringBuilder sb = new StringBuilder();
+
+        for(char ch : order.toCharArray()) {
+            for(char c : s.toCharArray()) {
+                if(c == ch) {
+                    sb.append(c);
+                }
+            }
+        }
+        for(char c : s.toCharArray()) {
+            if(order.indexOf(c) == -1) {
+                sb.append(c);
+            }
+        }
+        return sb.toString();
+    }
+}

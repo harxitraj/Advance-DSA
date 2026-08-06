@@ -1,0 +1,17 @@
+class Solution {
+    public int smallestNumber(int n, int t) {
+        for(int i = n; i < Integer.MAX_VALUE; i++) {
+            int curr = i;
+            int product = 1;
+            while(curr != 0) {
+                int last = curr % 10;
+                product *= last;
+                curr /= 10;
+            }
+            if(product % t == 0) {
+                return i;
+            }
+        }
+        return -1;
+    }
+}
